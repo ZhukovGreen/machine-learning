@@ -16,3 +16,15 @@ try:
     print("Wholesale customers dataset has {} samples with {} features each.".format(*data.shape))
 except:
     print("Dataset could not be loaded. Is the dataset missing?")
+
+print(data)
+
+##########################################################
+
+# TODO: Select three indices of your choice you wish to sample from the dataset
+indices = [0, 1, 2]
+
+# Create a DataFrame of the chosen samples
+samples = pd.DataFrame(data.loc[indices], columns=data.keys()).reset_index(drop=True)
+print("Chosen samples of wholesale customers dataset:")
+display(samples)
