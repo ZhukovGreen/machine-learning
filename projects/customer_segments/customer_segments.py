@@ -28,3 +28,27 @@ indices = [0, 1, 2]
 samples = pd.DataFrame(data.loc[indices], columns=data.keys()).reset_index(drop=True)
 print("Chosen samples of wholesale customers dataset:")
 display(samples)
+
+##########################################################
+# TODO: Make a copy of the DataFrame, using the 'drop' function to drop the given feature
+feature_to_drop = 'Detergents_Paper'
+new_data = data.drop([feature_to_drop], axis=1)
+
+# TODO: Split the data into training and testing sets(0.25) using the given feature as the target
+# Set a random state.
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(new_data,
+                                                    data[feature_to_drop],
+                                                    test_size=0.25,
+                                                    random_state=1)
+
+# TODO: Create a decision tree regressor and fit it to the training set
+from sklearn.tree import DecisionTreeRegressor
+
+regressor = DecisionTreeRegressor()
+regressor = regressor.fit(X_train, y_train)
+
+# TODO: Report the score of the prediction using the testing set
+score = regressor.score(X_test, y_test)
+print(score)
