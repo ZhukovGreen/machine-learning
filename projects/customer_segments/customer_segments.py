@@ -1,6 +1,7 @@
 # Import libraries necessary for this project
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 from IPython.display import display  # Allows the use of display() for DataFrames
 
 # Import supplementary visualizations code visuals.py
@@ -52,3 +53,8 @@ regressor = regressor.fit(X_train, y_train)
 # TODO: Report the score of the prediction using the testing set
 score = regressor.score(X_test, y_test)
 print(score)
+
+###########################################################
+# Produce a scatter matrix for each pair of features in the data
+pd.plotting.scatter_matrix(data, alpha=0.3, figsize=(14, 8), diagonal='kde')
+plt.show()
