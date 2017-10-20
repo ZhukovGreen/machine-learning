@@ -1,6 +1,7 @@
 ###########################################
 # Suppress matplotlib user warnings
 # Necessary for newer version of matplotlib
+import pathlib
 import warnings
 
 warnings.filterwarnings("ignore", category=UserWarning, module="matplotlib")
@@ -129,19 +130,11 @@ def biplot(good_data, reduced_data, pca):
     return ax
 
 
-def channel_results(reduced_data, outliers, pca_samples):
+def channel_results(full_data, reduced_data, outliers, pca_samples):
     '''
     Visualizes the PCA-reduced cluster data in two dimensions using the full dataset
     Data is labeled by "Channel" and cues added for student-selected sample data
     '''
-
-    # Check that the dataset is loadable
-    try:
-        full_data = pd.read_csv("customers.csv")
-    except:
-        print("Dataset could not be loaded. Is the file missing?")
-        return False
-
     # Create the Channel DataFrame
     channel = pd.DataFrame(full_data['Channel'], columns=['Channel'])
     channel = channel.drop(channel.index[outliers]).reset_index(drop=True)
