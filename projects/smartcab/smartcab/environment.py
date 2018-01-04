@@ -67,7 +67,7 @@ class Environment(object):
             self.roads.append(((x, self.bounds[3] + self.hang), (x, self.bounds[3])))
         for y in range(self.bounds[1], self.bounds[3] + 1):
             self.roads.append(((self.bounds[0] - self.hang, y), (self.bounds[0], y)))
-            self.roads.append(((self.bounds[2] + self.hang, y), (self.bounds[2], y)))    
+            self.roads.append(((self.bounds[2] + self.hang, y), (self.bounds[2], y)))
 
         # Create dummy agents
         for i in range(self.num_dummies):
@@ -148,7 +148,7 @@ class Environment(object):
                     'destination': destination,
                     'deadline': deadline
                 }
-            # For dummy agents, make them choose one of the available 
+            # For dummy agents, make them choose one of the available
             # intersections and headings still in 'positions'
             else:
                 intersection = random.choice(list(positions.keys()))
@@ -164,7 +164,7 @@ class Environment(object):
                 if positions[intersection] == list(): # No headings available for intersection
                     del positions[intersection] # Delete the intersection altogether
 
-    
+
             agent.reset(destination=(destination if agent is self.primary_agent else None), testing=testing)
             if agent is self.primary_agent:
                 # Reset metrics for this trial (step data will be set during the step)
@@ -289,7 +289,7 @@ class Environment(object):
         # Scales reward multiplicatively from [0, 1]
         fnc = self.t * 1.0 / (self.t + state['deadline']) if agent.primary_agent else 0.0
         gradient = 10
-        
+
         # No penalty given to an agent that has no enforced deadline
         penalty = 0
 
@@ -302,16 +302,7 @@ class Environment(object):
             if light != 'green': # Running red light
                 violation = 2 # Major violation
                 if inputs['left'] == 'forward' or inputs['right'] == 'forward': # Cross traffic
-                    violation = 4 # Accident
-        
-        # Agent wants to drive left:
-        elif action == 'left':
-            if light != 'green': # Running a red light
-                violation = 2 # Major violation
-                if inputs['left'] == 'forward' or inputs['right'] == 'forward': # Cross traffic
-                    violation = 4 # Accident
-                elif inputs['oncoming'] == 'right': # Oncoming car turning right
-                    violation = 4 # Accident
+                    violation = 4 # Acciden
             else:# Green light
                 if inputs['oncoming'] == 'right' or inputs['oncoming'] == 'forward': # Incoming traffic
                     violation = 3 # Accident
@@ -327,7 +318,7 @@ class Environment(object):
 
         # Agent wants to perform no action:
         elif action == None:
-            if light == 'green': 
+            if light == 'green':
                 violation = 1 # Minor violation
 
 
@@ -366,7 +357,7 @@ class Environment(object):
                 # Did agent get to destination before deadline?
                 if state['deadline'] >= 0:
                     self.trial_data['success'] = 1
-                
+
                 # Stop the trial
                 self.done = True
                 self.success = True
@@ -387,7 +378,7 @@ class Environment(object):
             self.step_data['light'] = light
             self.step_data['action'] = action
             self.step_data['reward'] = reward
-            
+
             self.trial_data['final_deadline'] = state['deadline'] - 1
             self.trial_data['net_reward'] += reward
             self.trial_data['actions'][violation] += 1
@@ -431,7 +422,7 @@ class Agent(object):
         return self.state
 
     def get_next_waypoint(self):
-        return self.next_waypoint  
+        return self.next_waypoint
 
 
 class DummyAgent(Agent):
