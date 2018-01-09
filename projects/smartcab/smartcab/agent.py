@@ -1,4 +1,5 @@
 import logging
+import math
 import random
 
 from environment import Agent, Environment
@@ -8,6 +9,7 @@ from simulator import Simulator
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
 
 class LearningAgent(Agent):
     """ An agent that learns to drive in the Smartcab world.
@@ -48,11 +50,16 @@ class LearningAgent(Agent):
 
         if testing:
             self.epsilon, self.alpha = 0, 0
-
-        # self.epsilon -= 0.05
-        self.t += 1
-        # self.epsilon = self.alpha ** self.t
-        self.epsilon *= 0.995
+        else:
+            self.t += 1
+            # self.epsilon -= 0.05
+            # self.epsilon = self.alpha ** self.t
+            # self.epsilon = self.alpha ** self.t
+            # self.epsilon = math.exp(-1 * self.alpha * self.t)
+            self.epsilon *= 0.95
+            # self.epsilon =math.cos(self.alpha * self.t)
+            # self.epsilon = 1 / self.t ** 2
+            # self.epsilon = 1 / self.t ** 2
 
 
         return None
@@ -77,8 +84,14 @@ class LearningAgent(Agent):
         # With the hand-engineered features, this learning process gets entirely negated.
 
         # Set 'state' as a tuple of relevant data for the agent
-        state = (inputs['left'], inputs['right'], inputs['light'],
+        state = (waypoint, inputs['left'], inputs['right'], inputs['light'],
                  inputs['oncoming'], deadline)
+        state = (
+            inputs['light'],
+            inputs['left'],
+            inputs['oncoming'],
+            waypoint,
+        )
 
         return state
 
@@ -106,10 +119,16 @@ class LearningAgent(Agent):
         #   Then, for each action available, set the initial Q-value to 0.0
 
         logger.debug('State is:\n {!r}'.format(state))
+        ini_value = 0
 
         if self.learning:
             self.Q.setdefault(
-                state, {None: 0.0, 'forward': 0.0, 'left': 0.0 , 'right': 0.0}
+                state, {
+                None: ini_value,
+                'forward': ini_value,
+                'left': ini_value,
+                'right': ini_value,
+                }
             )
 
         return
@@ -157,7 +176,6 @@ class LearningAgent(Agent):
         if self.learning:
             self.Q[state][action] = (1 - self.alpha) * self.Q[state][action] + \
                                      self.alpha * reward
-        logger.debug(self.Q)
         return
 
 
@@ -186,6 +204,7 @@ def run():
     #   num_dummies - discrete number of dummy agents in the environment, default is 100
     #   grid_size   - discrete number of intersections (columns, rows), default is (8, 6)
     env = Environment(verbose=True)
+
 
     ##############
     # Create the driving agent
@@ -226,7 +245,7 @@ def run():
     # Flags:
     #   tolerance  - epsilon tolerance before beginning testing, default is 0.05
     #   n_test     - discrete number of testing trials to perform, default is 0
-    sim.run(n_test=50, tolerance=0.005)
+    sim.run(n_test=20, tolerance=0.001)
 
 
 if __name__ == '__main__':
