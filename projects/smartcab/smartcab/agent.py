@@ -57,7 +57,7 @@ class LearningAgent(Agent):
             # self.epsilon = self.alpha ** self.t
             # self.epsilon = math.exp(-1 * self.alpha * self.t)
             # self.epsilon *= 0.95
-            self.epsilon = math.cos(self.alpha * self.t / 100)
+            self.epsilon = math.cos(self.alpha * self.t / 150)
             # self.epsilon = 1 / self.t ** 2
 
 
@@ -215,7 +215,7 @@ def run():
         LearningAgent,
         learning=True,
         epsilon=1,
-        alpha=0.9,
+        alpha=0.90,
     )
 
     ##############
@@ -244,7 +244,7 @@ def run():
     # Flags:
     #   tolerance  - epsilon tolerance before beginning testing, default is 0.05
     #   n_test     - discrete number of testing trials to perform, default is 0
-    sim.run(n_test=10, tolerance=0.005)
+    sim.run(n_test=50, tolerance=0.005)
 
 
 if __name__ == '__main__':
