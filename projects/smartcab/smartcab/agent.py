@@ -2,51 +2,51 @@ import logging
 import math
 import random
 
-from environment import Agent, Environment
-from planner import RoutePlanner
-from simulator import Simulator
+from environment import agent, environment
+from planner import routeplanner
+from simulator import simulator
 
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+logging.basicconfig(level=logging.info)
+logger = logging.getlogger(__name__)
 
 
-class LearningAgent(Agent):
-    """ An agent that learns to drive in the Smartcab world.
-        This is the object you will be modifying. """
+class learningagent(agent):
+    """ an agent that learns to drive in the smartcab world.
+        this is the object you will be modifying. """
 
-    def __init__(self, env, learning=False, epsilon=1.0, alpha=0.5):
-        super(LearningAgent, self).__init__(env)     # Set the agent in the evironment
-        self.planner = RoutePlanner(self.env, self)  # Create a route planner
-        self.valid_actions = self.env.valid_actions  # The set of valid actions
+    def __init__(self, env, learning=false, epsilon=1.0, alpha=0.5):
+        super(learningagent, self).__init__(env)     # set the agent in the evironment
+        self.planner = routeplanner(self.env, self)  # create a route planner
+        self.valid_actions = self.env.valid_actions  # the set of valid actions
 
-        # Set parameters of the learning agent
-        self.learning = learning # Whether the agent is expected to learn
-        self.Q = dict()          # Create a Q-table which will be a dictionary of tuples
-        self.epsilon = epsilon   # Random exploration factor
-        self.alpha = alpha       # Learning factor
+        # set parameters of the learning agent
+        self.learning = learning # whether the agent is expected to learn
+        self.q = dict()          # create a q-table which will be a dictionary of tuples
+        self.epsilon = epsilon   # random exploration factor
+        self.alpha = alpha       # learning factor
 
         ###########
-        ## TO DO ##
+        ## to do ##
         ###########
-        # Set any additional class parameters as needed
+        # set any additional class parameters as needed
         self.t = 0               # trial number
 
 
-    def reset(self, destination=None, testing=False):
-        """ The reset function is called at the beginning of each trial.
-            'testing' is set to True if testing trials are being used
+    def reset(self, destination=none, testing=false):
+        """ the reset function is called at the beginning of each trial.
+            'testing' is set to true if testing trials are being used
             once training trials have completed. """
 
-        # Select the destination as the new location to route to
+        # select the destination as the new location to route to
         self.planner.route_to(destination)
 
         ###########
-        ## TO DO ##
+        ## to do ##
         ###########
-        # Update epsilon using a decay function of your choice
-        # Update additional class parameters as needed
-        # If 'testing' is True, set epsilon and alpha to 0
+        # update epsilon using a decay function of your choice
+        # update additional class parameters as needed
+        # if 'testing' is true, set epsilon and alpha to 0
 
         if testing:
             self.epsilon, self.alpha = 0, 0
@@ -61,30 +61,30 @@ class LearningAgent(Agent):
             # self.epsilon = 1 / self.t ** 2
 
 
-        return None
+        return none
 
     def build_state(self):
-        """ The build_state function is called when the agent requests data from the
-            environment. The next waypoint, the intersection inputs, and the deadline
+        """ the build_state function is called when the agent requests data from the
+            environment. the next waypoint, the intersection inputs, and the deadline
             are all features available to the agent. """
 
-        # Collect data about the environment
-        waypoint = self.planner.next_waypoint() # The next waypoint
-        inputs = self.env.sense(self)           # Visual input - intersection light and traffic
-        deadline = self.env.get_deadline(self)  # Remaining deadline
+        # collect data about the environment
+        waypoint = self.planner.next_waypoint() # the next waypoint
+        inputs = self.env.sense(self)           # visual input - intersection light and traffic
+        deadline = self.env.get_deadline(self)  # remaining deadline
 
         ###########
-        ## TO DO ##
+        ## to do ##
         ###########
 
-        # NOTE : you are not allowed to engineer eatures outside of the inputs available.
-        # Because the aim of this project is to teach Reinforcement Learning, we have placed
+        # note : you are not allowed to engineer eatures outside of the inputs available.
+        # because the aim of this project is to teach reinforcement learning, we have placed
         # constraints in order for you to learn how to adjust epsilon and alpha, and thus learn about the balance between exploration and exploitation.
-        # With the hand-engineered features, this learning process gets entirely negated.
+        # with the hand-engineered features, this learning process gets entirely negated.
 
-        # Set 'state' as a tuple of relevant data for the agent
-        state = (waypoint, inputs['left'], inputs['right'], inputs['light'],
-                 inputs['oncoming'], deadline)
+        # set 'state' as a tuple of relevant data for the agent
+        # state = (waypoint, inputs['left'], inputs['right'], inputs['light'],
+        #          inputs['oncoming'], deadline)
         state = (
             inputs['light'],
             inputs['left'],
