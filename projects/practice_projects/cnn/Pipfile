@@ -1,0 +1,22 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+requests = "*"
+Keras = "*"
+tensorflow = "*"
+matplotlib = "*"
+"h5py" = "*"
+Cython = "*"
+scikit-learn = "*"
+
+[dev-packages]
+jupyter = "*"
+
+[requires]
+python_version = "3.6"
+
+[pipenv]
+allow_prereleases = true
